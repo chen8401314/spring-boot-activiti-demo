@@ -1,0 +1,93 @@
+buildscript {
+    ext {
+        springBootVersion = '2.2.0.RELEASE'
+        mapstructVersion = "1.4.0.CR1"
+        lombokVersion = "1.18.8"
+        junitVersion = "4.12"
+        jmockitVersion = "1.20"
+        h2Version = "1.4.200"
+    }
+    repositories {
+        mavenCentral()
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
+group = 'com.gradle.demo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 11
+targetCompatibility = 11
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+
+    group = 'com.example'
+    version = '0.0.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+    compileJava {
+        options.fork = true
+        options.encoding = "UTF-8"
+    }
+
+    compileTestJava {
+        options.fork = true
+        options.failOnError = false
+        options.encoding = "UTF-8"
+    }
+
+    test {
+        minHeapSize = "512m"
+        maxHeapSize = "2048m"
+        ignoreFailures = true
+        testLogging.showStandardStreams = true
+    }
+
+    jar {
+        duplicatesStrategy = 'EXCLUDE'
+        version = project.version
+    }
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ["src/main/java", "build/generated/sources/annotationProcessor/java/main"]
+            }
+            resources {
+                srcDirs = ["src/main/resources"]
+            }
+        }
+    }
+
+    dependencies {
+        compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
+        compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+        compileOnly("org.projectlombok:lombok:${lombokVersion}")
+        testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    }
+}

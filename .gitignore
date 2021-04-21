@@ -1,0 +1,19 @@
+/.idea/
+## Project exclude paths
+/.gradle/
+/build/
+/build/libs/
+/build/tmp/
+#/entity/build/classes/
+#/entity/build/classes/java/main/
+#/entity/build/libs/
+#/entity/build/tmp/
+#/application/build/
+
+# Project exclude paths
+/application/build/
+/application/build/classes/
+/application/build/classes/java/main/
+/application/build/libs/
+/application/build/resources/
+/application/build/tmp/
